@@ -25,8 +25,11 @@ export const LOCALSTORAGE = {
 }
 export const zBottomMenu = [
   //{ name: `홈`, link: '/user/home', icon: <img src={defaultSettings.themeDnsData.logo_img} alt="#" style={{ height: '24px' }} />, className: 'master-dropdown-btn', allowLink: '/user/home' },
-  { name: '서비스소개', link: '/user/service-info?type=0', icon: <Icon icon='mdi:map-marker-check-outline' style={{ fontSize: '24px' }} />, className: '', allowLink: '/user/service-info' },
-  { name: '연동형API', link: '/user/api?type=0', icon: <Icon icon='mdi:comment-question-outline' style={{ fontSize: '24px' }} />, className: '', allowLink: '/user/api' },
+  { name: '서비스 소개', link: '/user/service-info?type=0', icon: <Icon icon='mdi:map-marker-check-outline' style={{ fontSize: '24px' }} />, className: '', allowLink: '/user/service-info' },
+  { name: '결제', link: '/user/pay', icon: <Icon icon='clarity:chat-bubble-line' style={{ fontSize: '24px' }} />, className: '', allowLink: '/user/pay' },
+  { name: '문자 발송', link: '/user/send', icon: <Icon icon='clarity:chat-bubble-line' style={{ fontSize: '24px' }} />, className: '', allowLink: '/user/send' },
+  { name: '발송 내역', link: '/user/result', icon: <Icon icon='clarity:chat-bubble-line' style={{ fontSize: '24px' }} />, className: '', allowLink: '/user/result' },
+  { name: '연동형 API', link: '/user/api?type=0', icon: <Icon icon='mdi:comment-question-outline' style={{ fontSize: '24px' }} />, className: '', allowLink: '/user/api' },
   { name: '고객센터', link: '/user/help', icon: <Icon icon='clarity:chat-bubble-line' style={{ fontSize: '24px' }} />, className: '', allowLink: '/user/help' },
 ];
 export const zTabMenu = {

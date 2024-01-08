@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react";
-import { Button, Chip, IconButton } from "@mui/material";
+import { Button, Chip, IconButton, Popper, Fade, Paper, Box } from "@mui/material";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useAuthContext } from "src/auth/useAuthContext";
@@ -60,13 +61,25 @@ const Header = (props) => {
     const { logout, user } = useAuthContext();
     const { themeDnsData } = useSettingsContext();
     const [deposit, setDeposit] = useState(0);
+    const [popperOpen, setPopperOpen] = useState(false);
+    const [anchor, setAnchor] = useState(null);
+    const [placement, setPlacement] = useState();
+
     useEffect(() => {
         getDeposit();
     }, []);
+
     const getDeposit = async () => {
-        let result = await apiManager('auth','get',{id:'deposit'});
-        setDeposit(result?.deposit??0);
+        let result = await apiManager('auth', 'get', { id: 'deposit' });
+        setDeposit(result?.deposit ?? 0);
     }
+
+    const handlePopper = (newPlacement) => (event) => {
+        setAnchor(event.currentTarget)
+        setPopperOpen((prev) => placement !== newPlacement || !prev)
+        setPlacement(newPlacement)
+    }
+
     return (
         <>
             <Wrappers>
@@ -86,17 +99,76 @@ const Header = (props) => {
                     {user ?
                         <>
                             <Row style={{ alignItems: 'center', columnGap: '1rem' }}>
-                                <Col style={{ rowGap: '0.5rem' }}>
-                                    <Row style={{ alignItems: 'center', columnGap: '1rem' }}>
+                                <Col style={{ rowGap: '0.5rem', cursor: 'pointer' }} >
+                                    <Row
+                                        style={{ alignItems: 'center', columnGap: '1rem' }}
+                                        onClick={() => {
+                                            user?.nickname == '관리자' ? router.push('/manager') : router.push('/user/user-info')
+                                        }}>
                                         <Icon icon={'bxs:user'} />
                                         <div>{user?.nickname} ({user?.user_name})</div>
                                     </Row>
-                                    <Chip label={`잔여예치금: ${commarNumber(deposit)}P`} size="small" variant="outlined" />
+                                    <Chip
+                                        label={`잔여예치금: ${commarNumber(deposit)}P`}
+                                        size="small"
+                                        variant="outlined"
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={handlePopper('bottom-end')}
+                                    />
                                 </Col>
                                 <Button variant="outlined" onClick={async () => {
                                     let result = await logout();
                                     window.location.href = '/'
                                 }}>로그아웃</Button>
+                                <Popper sx={{ zIndex: 100 }} open={popperOpen} anchorEl={anchor} placement={placement} transition >
+                                    {({ TransitionProps }) => (
+                                        <Fade {...TransitionProps} timeout={100} >
+                                            <Box boxShadow={3}>
+                                                <Paper sx={{ padding: '1rem' }}>
+                                                    <Icon
+                                                        icon={'bx:x'}
+                                                        style={{ width: '2rem', height: '2rem', float: 'right', cursor: 'pointer' }}
+                                                        onClick={() => { setPopperOpen(false) }}
+                                                    />
+                                                    <Table>
+                                                        <TableBody>
+                                                            <TableRow>
+                                                                <TableCell style={{ borderRight: '1px solid lightgray' }}>
+                                                                    잔여예치금
+                                                                </TableCell>
+                                                                <TableCell style={{ paddingLeft: '1rem' }}>
+                                                                    {commarNumber(deposit)} P
+                                                                    <Button style={{ border: '1px solid', marginLeft: '1rem' }} onClick={() => { router.push('/user/pay') }} >
+                                                                        충전하기
+                                                                    </Button>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            <TableRow>
+                                                                <TableCell style={{ borderRight: '1px solid lightgray' }}>
+                                                                    문자 발송<br />가능 건수
+                                                                </TableCell>
+                                                                <TableCell style={{ paddingLeft: '1rem' }}>
+                                                                    0건
+                                                                </TableCell>
+                                                            </TableRow>
+                                                            <TableRow>
+                                                                <TableCell style={{ borderRight: '1px solid lightgray' }}>
+                                                                    입금 전용<br />가상 계좌
+                                                                </TableCell>
+                                                                <TableCell style={{ paddingLeft: '1rem' }}>
+                                                                    미발급
+                                                                    <Button style={{ border: '1px solid', marginLeft: '1rem' }} onClick={() => { router.push('/user/pay') }} >
+                                                                        발급하기
+                                                                    </Button>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        </TableBody>
+                                                    </Table>
+                                                </Paper>
+                                            </Box>
+                                        </Fade>
+                                    )}
+                                </Popper>
                             </Row>
                         </>
                         :

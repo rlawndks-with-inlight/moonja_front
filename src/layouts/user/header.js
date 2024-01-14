@@ -80,6 +80,8 @@ const Header = (props) => {
         setPlacement(newPlacement)
     }
 
+    const SendAmount = Math.round(deposit/themeDnsData.setting_obj.sms)
+
     return (
         <>
             <Wrappers>
@@ -148,7 +150,7 @@ const Header = (props) => {
                                                                     문자 발송<br />가능 건수
                                                                 </TableCell>
                                                                 <TableCell style={{ paddingLeft: '1rem' }}>
-                                                                    0건
+                                                                    {SendAmount}건
                                                                 </TableCell>
                                                             </TableRow>
                                                             <TableRow>

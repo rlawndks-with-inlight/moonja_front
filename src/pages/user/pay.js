@@ -17,7 +17,8 @@ const BannerContainer = styled.div`
 const Pay = () => {
  
     const {themeDnsData} = useSettingsContext();
-    const [payment, setPayment] = useState(0)
+
+    const [payment, setPayment] = useState()
 
     const RealPayment = Math.round(payment*11000)
 
@@ -58,7 +59,7 @@ const Pay = () => {
                                 <TextField
                                     value={payment}
                                     margin='dense'
-                                    label='충전 단위 (+부가세 10%)'
+                                    label='충전 단위'
                                     onChange={handlePaymentChange}
                                     InputProps={{
                                         endAdornment:<div style={{width:'50px'}}>
@@ -66,7 +67,8 @@ const Pay = () => {
                                         </div>
                                     }}
                                 />
-                                <Row style={{color:'red'}}>최종 결제 금액 : {RealPayment}원</Row>
+                                <br />부가세 10%를 더한
+                                <Row style={{color:'red'}}>최종 결제 금액 : {RealPayment ? RealPayment : '0'}원</Row>
                             </TableCell>
                         </TableRow>
                         <TableRow>
@@ -75,7 +77,15 @@ const Pay = () => {
                             </TableCell>
                             <TableCell style={{ fontSize: 'large', paddingLeft: '2rem' }}>
                                 충전하시는 금액으로<br />발송 가능한 문자 건수는<br />
-                                총 {SendAmount}건
+                                총 {SendAmount? SendAmount : '0'}건
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell style={{ fontWeight: 'bold', fontSize: 'large', borderRight: '1px solid lightgray' }}>
+                                결제 방식
+                            </TableCell>
+                            <TableCell style={{ fontSize: 'large', paddingLeft: '2rem' }}>
+                                계좌 이체
                             </TableCell>
                         </TableRow>
                     </TableBody>
